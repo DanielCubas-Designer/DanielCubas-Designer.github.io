@@ -1,0 +1,79 @@
+<!-- @dsCard group="Portafolio" viewport="1280x820" name="Portafolio web" subtitle="Home, ficha de proyecto y perfil" -->
+<!-- @startingPoint section="Portafolio" subtitle="Sitio de portafolio completo" viewport="1280x820" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daniel Cubas — Portafolio</title>
+<link rel="stylesheet" href="../../styles.css">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="./data.js"></script>
+<style>
+  body { margin:0; background:var(--surface-page); color:var(--text-primary); font-family:var(--font-body); -webkit-font-smoothing:antialiased; }
+  a { color: var(--text-primary); text-decoration: none; }
+  a:hover { color: var(--accent); }
+  @media (max-width: 860px) {
+    main > section, main { --gutter: 32px; }
+    main > section[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 620px) {
+    header nav { gap: 20px !important; }
+    header { flex-wrap: wrap; row-gap: 16px; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+// El sitio real importará estos módulos con un bundler. Aquí se cargan en crudo
+// para que el kit funcione abriendo el archivo directamente.
+const FILES = [
+  "../../components/core/Button.jsx",
+  "../../components/core/Tag.jsx",
+  "../../components/core/SectionLabel.jsx",
+  "../../components/navigation/SiteHeader.jsx",
+  "../../components/navigation/SiteFooter.jsx",
+  "../../components/content/PhotoFrame.jsx",
+  "../../components/content/ProjectCard.jsx",
+  "../../components/content/EditorialHero.jsx",
+  "./Home.jsx",
+  "./ProjectDetail.jsx",
+  "./About.jsx"
+];
+
+const APP = `
+function App() {
+  const [screen, setScreen] = React.useState("work");
+  const [proyecto, setProyecto] = React.useState(null);
+  const open = (p) => { setProyecto(p); setScreen("detail"); window.scrollTo(0, 0); };
+  const go = (id) => { setScreen(id); setProyecto(null); window.scrollTo(0, 0); };
+  return (
+    <div>
+      <SiteHeader
+        items={[{ id: "work", label: "Proyectos" }, { id: "about", label: "Perfil" }, { id: "contact", label: "Contacto" }]}
+        active={screen === "detail" ? "work" : screen}
+        onNavigate={go} />
+      {screen === "work" && <Home proyectos={window.DC_PROYECTOS} onOpen={open} />}
+      {screen === "detail" && proyecto && <ProjectDetail proyecto={proyecto} onBack={() => go("work")} />}
+      {(screen === "about" || screen === "contact") && <About />}
+      <SiteFooter />
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+`;
+
+Promise.all(FILES.map(u => fetch(u).then(r => r.text()))).then(srcs => {
+  const raw = srcs.join("\n\n").replace(/^\s*import .*?;\s*$/gm, "").replace(/\bexport function/g, "function") + APP;
+  const code = Babel.transform(raw, { presets: ["react"] }).code;
+  new Function("React", "ReactDOM", code)(window.React, window.ReactDOM);
+}).catch(e => {
+  document.getElementById("root").innerHTML =
+    '<p style="padding:40px;font-family:sans-serif;color:#f0efeb">No se pudieron cargar los componentes: ' + e.message + '</p>';
+});
+</script>
+</body>
+</html>

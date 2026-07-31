@@ -1,0 +1,201 @@
+/* Danny Cubas Design System — hoja única del sitio.
+   Los tokens son los mismos del sistema de diseño. No editar valores sueltos:
+   cambie la variable y cambia todo el sitio. */
+
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap");
+
+:root {
+  --ink-900:#0a0a0a; --ink-800:#141414; --ink-700:#1c1c1c;
+  --bone-100:#f0efeb; --bone-90:rgba(240,239,235,.9); --bone-60:rgba(240,239,235,.6);
+  --bone-22:rgba(240,239,235,.22); --bone-12:rgba(240,239,235,.12);
+  --accent:#f2b336;
+
+  --surface-page:var(--ink-900); --text-primary:var(--bone-100);
+  --text-secondary:var(--bone-90); --text-muted:var(--bone-60);
+  --rule:var(--bone-22); --rule-soft:var(--bone-12);
+
+  --font-display:"Oswald","Helvetica Neue",sans-serif;
+  --font-body:"Inter","Helvetica Neue",sans-serif;
+
+  --type-display:clamp(48px,9.5vw,126px);
+  --type-h1:clamp(36px,5.6vw,84px);
+  --type-h3:clamp(19px,2.2vw,30px);
+  --type-lead:clamp(19px,2vw,28px);
+  --type-body:clamp(15px,1.1vw,17px);
+  --type-label:13px;
+
+  --ls-display:-2px; --ls-brand:7px; --ls-label:3px; --ls-nav:2.6px;
+  --lh-display:.95; --lh-body:1.75; --lh-lead:1.3;
+
+  --page-x:clamp(24px,7.8vw,150px);
+  --page-y:clamp(56px,5vw,96px);
+  --gutter:clamp(32px,5vw,96px);
+  --max-measure:660px;
+  --accent-bar-w:88px;
+
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+
+*,*::before,*::after { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  margin:0; background:var(--surface-page); color:var(--text-primary);
+  font-family:var(--font-body); font-weight:300;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+img { display:block; max-width:100%; }
+a { color:var(--text-primary); text-decoration:none; transition:color .32s var(--ease); }
+a:hover { color:var(--accent); }
+
+/* ---------- cabecera ---------- */
+.cabecera {
+  display:flex; align-items:center; justify-content:space-between; gap:28px; flex-wrap:wrap; row-gap:16px;
+  padding:36px var(--page-x); border-bottom:1px solid var(--rule-soft);
+  position:sticky; top:0; z-index:10; background:var(--surface-page);
+}
+.marca { display:flex; align-items:baseline; gap:22px; }
+.marca__nombre {
+  font-family:var(--font-display); font-size:17px; font-weight:500;
+  letter-spacing:var(--ls-brand); text-transform:uppercase; color:var(--text-primary);
+}
+.marca__loc { font-family:var(--font-display); font-size:var(--type-label); letter-spacing:4px; color:var(--accent); }
+.nav { display:flex; gap:44px; }
+.nav a {
+  font-family:var(--font-display); font-size:var(--type-label); letter-spacing:var(--ls-nav);
+  text-transform:uppercase; color:var(--text-muted); padding-bottom:4px; border-bottom:1px solid transparent;
+}
+.nav a:hover { color:var(--text-primary); }
+.nav a[aria-current="page"] { color:var(--text-primary); border-bottom-color:var(--accent); }
+
+/* ---------- tipografía ---------- */
+.titular {
+  margin:0; font-family:var(--font-display); font-weight:600; font-size:var(--type-display);
+  line-height:var(--lh-display); letter-spacing:var(--ls-display); text-transform:uppercase; text-wrap:balance;
+}
+.titular--h1 { font-size:var(--type-h1); }
+.titular em { font-style:normal; color:var(--accent); }
+.lead {
+  margin:0; font-family:var(--font-display); font-weight:300; font-style:italic;
+  font-size:var(--type-lead); line-height:var(--lh-lead); max-width:760px;
+}
+.texto {
+  margin:0; font-size:var(--type-body); font-weight:300; line-height:var(--lh-body);
+  color:var(--text-muted); max-width:var(--max-measure); text-wrap:pretty;
+}
+.rotulo {
+  font-family:var(--font-display); font-size:var(--type-label); font-weight:500;
+  letter-spacing:var(--ls-label); text-transform:uppercase; color:var(--text-secondary);
+}
+.barra { display:block; width:var(--accent-bar-w); height:2px; background:var(--accent); }
+.filete { display:block; width:100%; height:1px; background:var(--rule); }
+.seccion-rotulo { display:flex; align-items:center; gap:22px; }
+.seccion-rotulo::after { content:""; flex:1; max-width:70px; height:1px; background:var(--accent); }
+
+.disciplinas { display:flex; flex-wrap:wrap; align-items:center; gap:8px 22px; }
+.disciplinas span { font-family:var(--font-display); font-size:var(--type-label); letter-spacing:var(--ls-label); text-transform:uppercase; color:var(--text-secondary); }
+.disciplinas i { font-style:normal; color:var(--accent); }
+
+/* ---------- botones ---------- */
+.boton {
+  display:inline-flex; align-items:center; justify-content:center; gap:12px;
+  padding:14px 32px; font-family:var(--font-display); font-size:13px; font-weight:500;
+  letter-spacing:var(--ls-nav); text-transform:uppercase; white-space:nowrap; flex-shrink:0;
+  border:1px solid var(--rule); background:transparent; color:var(--text-primary);
+  cursor:pointer; border-radius:0; transition:background .32s var(--ease), color .32s var(--ease), border-color .32s var(--ease);
+}
+.boton:hover { border-color:var(--bone-100); color:var(--text-primary); }
+.boton--solido { background:var(--bone-100); color:var(--ink-900); border-color:var(--bone-100); }
+.boton--solido:hover { background:var(--accent); border-color:var(--accent); color:var(--ink-900); }
+.boton--fantasma { border-color:transparent; padding:14px 0; color:var(--text-muted); }
+.boton--fantasma:hover { color:var(--accent); }
+
+/* ---------- portada ---------- */
+.portada {
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.72fr);
+  gap:var(--gutter); align-items:center; padding:var(--page-y) var(--page-x);
+}
+.portada__texto { display:flex; flex-direction:column; gap:36px; }
+.portada__acciones { display:flex; gap:16px; flex-wrap:wrap; }
+.portada__foto { position:relative; overflow:hidden; aspect-ratio:4/5; }
+.portada__foto img { width:100%; height:100%; object-fit:cover; filter:contrast(1.06) saturate(.96); }
+
+/* ---------- retícula de proyectos ---------- */
+.proyectos { padding:0 var(--page-x) var(--page-y); }
+.proyectos__cabeza { margin-bottom:56px; }
+.reticula { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:var(--gutter) 36px; }
+
+.tarjeta { display:block; }
+.tarjeta__marco { position:relative; overflow:hidden; aspect-ratio:4/5; background:var(--ink-800); }
+.tarjeta:nth-child(3n+1) .tarjeta__marco { aspect-ratio:3/4; }
+.tarjeta__marco img {
+  width:100%; height:100%; object-fit:cover; filter:contrast(1.06) saturate(.96) grayscale(.15);
+  transition:transform .62s var(--ease), filter .32s var(--ease);
+}
+.tarjeta:hover .tarjeta__marco img { transform:scale(1.03); filter:contrast(1.06) saturate(.96) grayscale(0); }
+.tarjeta__num {
+  position:absolute; top:16px; left:16px; font-family:var(--font-display); font-size:var(--type-label);
+  letter-spacing:var(--ls-label); color:var(--bone-100); mix-blend-mode:difference;
+}
+.tarjeta__pie { display:flex; align-items:baseline; justify-content:space-between; gap:22px; margin-top:22px; }
+.tarjeta__titulo {
+  margin:0; font-family:var(--font-display); font-size:var(--type-h3); font-weight:500;
+  text-transform:uppercase; letter-spacing:.5px; line-height:1.05; transition:color .32s var(--ease);
+}
+.tarjeta:hover .tarjeta__titulo { color:var(--accent); }
+.tarjeta__anio { font-family:var(--font-display); font-size:var(--type-label); letter-spacing:2.4px; color:var(--text-muted); }
+.tarjeta__cat { margin:8px 0 0; font-size:15px; color:var(--text-muted); }
+
+/* ---------- ficha de proyecto ---------- */
+.ficha__hero { position:relative; height:62vh; min-height:360px; overflow:hidden; }
+.ficha__hero img { width:100%; height:100%; object-fit:cover; filter:contrast(1.06) saturate(.96); }
+.ficha__hero::after {
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg,rgba(10,10,10,.2) 0%,rgba(10,10,10,.1) 50%,rgba(10,10,10,.95) 100%);
+}
+.ficha__titulo {
+  position:absolute; left:var(--page-x); right:var(--page-x); bottom:56px; z-index:2;
+  display:flex; flex-direction:column; gap:22px;
+}
+.ficha__cuerpo {
+  display:grid; grid-template-columns:minmax(0,.4fr) minmax(0,1fr); gap:var(--gutter);
+  padding:var(--page-y) var(--page-x); align-items:start;
+}
+.ficha__meta { display:flex; flex-direction:column; gap:36px; }
+.dato { display:flex; flex-direction:column; gap:6px; }
+.dato__k { font-family:var(--font-display); font-size:var(--type-label); letter-spacing:var(--ls-label); text-transform:uppercase; color:var(--text-muted); }
+.dato__v { font-family:var(--font-display); font-size:19px; letter-spacing:1px; }
+.galeria { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:36px; padding:0 var(--page-x) var(--page-y); }
+.galeria figure { margin:0; position:relative; overflow:hidden; aspect-ratio:4/5; background:var(--ink-800); }
+.galeria figure:first-child { aspect-ratio:3/4; }
+.galeria img { width:100%; height:100%; object-fit:cover; filter:contrast(1.06) saturate(.96); }
+
+/* ---------- perfil ---------- */
+.perfil {
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.68fr); gap:var(--gutter);
+  padding:var(--page-y) var(--page-x); align-items:start;
+}
+.perfil__texto { display:flex; flex-direction:column; gap:36px; }
+.perfil__foto { position:relative; overflow:hidden; aspect-ratio:4/5; }
+.perfil__foto img { width:100%; height:100%; object-fit:cover; filter:contrast(1.06) saturate(.96); }
+
+/* ---------- pie ---------- */
+.pie {
+  display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:36px;
+  padding:74px var(--page-x) 56px; border-top:1px solid var(--rule);
+}
+.pie__nota { margin:0; max-width:330px; font-size:15px; line-height:1.55; color:var(--text-muted); }
+.pie__contacto { display:flex; gap:44px; font-family:var(--font-display); font-size:21px; letter-spacing:2.4px; }
+
+/* ---------- móvil ---------- */
+@media (max-width:860px) {
+  .portada, .ficha__cuerpo, .perfil { grid-template-columns:1fr; }
+  .portada__foto, .perfil__foto { aspect-ratio:3/2; }
+  .ficha__hero { height:52vh; }
+  .cabecera { padding:24px var(--page-x); }
+  .nav { gap:24px; }
+  .pie__contacto { gap:24px; font-size:18px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  *, *::before, *::after { transition:none !important; animation:none !important; }
+  html { scroll-behavior:auto; }
+}

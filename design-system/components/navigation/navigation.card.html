@@ -1,0 +1,22 @@
+<!-- @dsCard group="Components" viewport="700x330" name="Navigation" subtitle="Cabecera y pie del sitio" -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--surface-page);color:var(--text-primary);font-family:var(--font-body);--page-x:32px;}</style>
+</head>
+<body><div id="root"></div>
+<script type="text/babel" data-presets="react">
+const NS = Object.values(window).find(v => v && typeof v === "object" && v.SiteHeader) || {};
+const { SiteHeader, SiteFooter } = NS;
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <div>
+    <SiteHeader items={[{id:"work",label:"Proyectos"},{id:"about",label:"Perfil"},{id:"contact",label:"Contacto"}]} active="work" />
+    <div style={{height:"40px"}} />
+    <SiteFooter />
+  </div>
+);
+</script></body></html>

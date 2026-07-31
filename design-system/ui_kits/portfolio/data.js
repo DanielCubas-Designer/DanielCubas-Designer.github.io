@@ -1,0 +1,21 @@
+// Espejo en JS de lo que el sitio real leerá de /contenido/proyectos/*/proyecto.md
+window.DC_PROYECTOS = [
+  { slug: "01-serie-nocturna", titulo: "Serie nocturna", anio: "2025", categoria: "Fotografía", cliente: "Personal",
+    portada: "p-duo-bw.jpeg", galeria: ["p-duo-magenta.jpeg", "p-candle-magenta.jpeg", "p-duo-blue.jpeg"],
+    texto: "Una serie de retratos hechos con una sola fuente de luz cálida. Me interesaba el momento justo antes del gesto, cuando la persona todavía no sabe que la estoy mirando." },
+  { slug: "02-direccion-de-arte", titulo: "Dirección de arte", anio: "2024", categoria: "Identidad visual", cliente: "Marca local",
+    portada: "p-duo-magenta.jpeg", galeria: ["p-duo-bw.jpeg", "p-candle-magenta.jpeg"],
+    texto: "Construcción de un mundo visual completo: paleta, tipografía, tratamiento fotográfico y las reglas para que todo siga funcionando cuando yo ya no esté." },
+  { slug: "03-retratos-de-calle", titulo: "Retratos de calle", anio: "2024", categoria: "Fotografía", cliente: "Personal",
+    portada: "p-walk-sunset.jpeg", galeria: ["p-portrait-sunset.jpeg", "p-guitar.jpeg"],
+    texto: "Caminar sin plan durante una hora antes del atardecer y fotografiar lo que aparezca. La restricción de tiempo es lo que hace el proyecto." },
+  { slug: "04-musica", titulo: "Música en vivo", anio: "2023", categoria: "Contenido", cliente: "Sesión",
+    portada: "p-guitar.jpeg", galeria: ["p-duo-blue.jpeg", "p-candle-magenta.jpeg"],
+    texto: "Registro de sesiones acústicas en espacios pequeños. Poca luz, nada de flash, todo a mano alzada." },
+  { slug: "05-luz-calida", titulo: "Luz cálida", anio: "2023", categoria: "Fotografía", cliente: "Personal",
+    portada: "p-candle-magenta.jpeg", galeria: ["p-duo-magenta.jpeg", "p-portrait-sunset.jpeg"],
+    texto: "Un ejercicio sobre temperatura de color: velas, magentas y el grano que aparece cuando se fuerza el ISO." },
+  { slug: "06-azul", titulo: "Serie azul", anio: "2022", categoria: "Dirección de arte", cliente: "Personal",
+    portada: "p-duo-blue.jpeg", galeria: ["p-duo-bw.jpeg", "p-walk-sunset.jpeg"],
+    texto: "El contrapunto frío de la serie nocturna. Mismo método, temperatura invertida." },
+];

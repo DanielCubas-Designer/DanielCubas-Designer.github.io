@@ -1,0 +1,20 @@
+# Material fuente entregado por el cliente: PDFs, CV, capturas y fotos de WhatsApp.
+# ~35 MB que no forman parte del sitio publicado. Se conservan en el disco local.
+# Para incluirlos en el repositorio, borrar estas dos líneas.
+design-system/uploads/
+design-system/scraps/
+
+# Herramientas locales
+.claude/
+
+# Sistema operativo / editor
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# Dependencias (el sitio no las usa; sólo aparecen si se corre `npx serve`)
+node_modules/

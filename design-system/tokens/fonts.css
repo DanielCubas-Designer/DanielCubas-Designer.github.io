@@ -1,0 +1,3 @@
+/* Oswald (display) + Inter (texto). Servidas por Google Fonts.
+   Si el cliente entrega los binarios, se sustituye por @font-face locales. */
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap");

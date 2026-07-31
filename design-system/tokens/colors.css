@@ -1,0 +1,35 @@
+:root {
+  /* Base — negros del papel */
+  --ink-900: #0a0a0a;
+  --ink-800: #141414;
+  --ink-700: #1c1c1c;
+  --ink-600: #262626;
+
+  /* Hueso — el blanco cálido, nunca #fff puro */
+  --bone-100: #f0efeb;
+  --bone-90: rgba(240, 239, 235, 0.9);
+  --bone-60: rgba(240, 239, 235, 0.6);
+  --bone-40: rgba(240, 239, 235, 0.4);
+  --bone-22: rgba(240, 239, 235, 0.22);
+  --bone-12: rgba(240, 239, 235, 0.12);
+
+  /* Acento — único color del sistema. Uso mínimo. */
+  --accent: #f2b336;
+  --accent-dim: rgba(242, 179, 54, 0.5);
+
+  /* Semánticos */
+  --surface-page: var(--ink-900);
+  --surface-raised: var(--ink-800);
+  --surface-inset: var(--ink-700);
+  --text-primary: var(--bone-100);
+  --text-secondary: var(--bone-90);
+  --text-muted: var(--bone-60);
+  --rule: var(--bone-22);
+  --rule-soft: var(--bone-12);
+  --accent-line: var(--accent);
+
+  /* Veladuras sobre fotografía */
+  --veil-soft: linear-gradient(180deg, rgba(10,10,10,0) 55%, rgba(10,10,10,0.92) 100%);
+  --veil-side: linear-gradient(90deg, rgba(8,8,8,0.86) 0%, rgba(8,8,8,0.6) 32%, rgba(8,8,8,0.12) 60%, rgba(8,8,8,0.42) 100%);
+  --veil-flat: rgba(10, 10, 10, 0.45);
+}

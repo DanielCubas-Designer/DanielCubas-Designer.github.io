@@ -1,0 +1,25 @@
+:root {
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 22px;
+  --sp-6: 28px;
+  --sp-7: 36px;
+  --sp-8: 44px;
+  --sp-9: 56px;
+  --sp-10: 74px;
+  --sp-11: 96px;
+  --sp-12: 150px;
+
+  /* Margen lateral de página: 150px en escritorio, 24px en móvil */
+  --page-x: clamp(24px, 7.8vw, 150px);
+  --page-y: clamp(48px, 5vw, 96px);
+  --gutter: clamp(28px, 5vw, 96px);
+  --max-measure: 660px;
+
+  --radius-none: 0px;
+  --border-hair: 1px;
+  --rule-accent: 2px;
+  --accent-bar-w: 88px;
+}

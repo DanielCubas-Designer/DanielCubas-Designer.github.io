@@ -1,6 +1,6 @@
 ---
 titulo: Masamune
-anio: 2026
+anio: 2019
 categoria: Cortometraje
 cliente: Personal
 portada: portada.jpg

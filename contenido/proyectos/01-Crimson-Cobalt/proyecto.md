@@ -1,12 +1,12 @@
 ---
-titulo: Serie nocturna
-anio: 2025
+titulo: Crimson Cobalt
+anio: 2024
 categoria: Fotografía
-cliente: Personal
+cliente: Diego & Fer
 portada: portada.jpg
-galeria: 01.jpg, 02.jpg, 03.jpg
+galeria: 01.jpg, 02.jpg, 03.jpg, 04.jpg, 05.jpg, 06.jpg
 orden: 1
 publicado: true
 ---
 
-Una serie de retratos hechos con una sola fuente de luz cálida. Me interesaba el momento justo antes del gesto, cuando la persona todavía no sabe que la estoy mirando.
+Cobertura que busca el momento antes del gesto: la conversación, la espera, la luz que cae y no posa. Sin dirección, solo atención.

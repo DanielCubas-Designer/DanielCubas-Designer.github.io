@@ -16,11 +16,19 @@ design-system/      documentación del sistema de diseño (no se publica como si
 
 ## Cómo añadir un proyecto
 
-**1.** Crear una carpeta dentro de `contenido/proyectos/`. El nombre lleva número al
-inicio, todo en minúsculas y con guiones:
+El sitio separa los proyectos en dos secciones: **Fotografía** y **Diseño**. Cada una
+es una carpeta dentro de `contenido/proyectos/`:
 
 ```
-contenido/proyectos/07-bodas-de-invierno/
+contenido/proyectos/fotografia/01-Crimson-Cobalt/
+contenido/proyectos/diseno/01-identidad-visual/
+```
+
+**1.** Crear una carpeta dentro de la sección correspondiente (`fotografia/` o `diseno/`).
+El nombre lleva número al inicio, todo en minúsculas y con guiones:
+
+```
+contenido/proyectos/diseno/07-bodas-de-invierno/
 ```
 
 **2.** Meter las fotos en esa carpeta:
@@ -46,14 +54,13 @@ Dos o tres frases sobre el proyecto. Se muestran grandes, en cursiva, al lado de
 Sin títulos ni listas: prosa corta.
 ```
 
-**4.** Añadir el nombre de la carpeta a `contenido/proyectos.json`:
+**4.** Añadir el nombre de la carpeta a `contenido/proyectos.json`, dentro de su sección:
 
 ```json
-[
-  "01-serie-nocturna",
-  "...",
-  "07-bodas-de-invierno"
-]
+{
+  "fotografia": ["01-Crimson-Cobalt", "...", "07-bodas-de-invierno"],
+  "diseno": ["01-identidad-visual", "..."]
+}
 ```
 
 Este último paso es el único que se olvida. Si el proyecto no aparece en el sitio,

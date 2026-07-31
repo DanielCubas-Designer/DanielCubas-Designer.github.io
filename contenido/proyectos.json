@@ -1,8 +1,14 @@
-[
-  "01-Crimson-Cobalt",
-  "02-Alympos",
-  "03-Notas-al-Corazon",
-  "04-Escencia-Cruda",
-  "05-Alexa-Campos-Esteticos",
-  "06-Los-Eternos"
-]
+{
+  "fotografia": [
+    "01-Crimson-Cobalt",
+    "02-Alympos",
+    "03-Notas-al-Corazon",
+    "04-Escencia-Cruda",
+    "05-Alexa-Campos-Esteticos",
+    "06-Los-Eternos"
+  ],
+  "diseno": [
+    "01-identidad-visual",
+    "02-direccion-de-arte"
+  ]
+}

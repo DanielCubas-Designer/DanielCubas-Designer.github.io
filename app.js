@@ -29,42 +29,55 @@ function leerMd(txt) {
 const lista = (v) => (v || '').split(',').map((s) => s.trim()).filter(Boolean);
 const esVerdad = (v) => v === undefined || /^(true|sí|si|yes|1)$/i.test(String(v).trim());
 
+// Secciones del sitio. Las claves son las carpetas dentro de contenido/proyectos/.
+const ETIQUETAS = { fotografia: 'Fotografía', diseno: 'Diseño' };
+
 /* ---------- carga de contenido ---------- */
 
 let PERFIL = null;
 let PROYECTOS = [];
+let SECCIONES = {};
 
 async function cargar() {
   const perfilTxt = await fetch(BASE + 'perfil.md').then((r) => r.text());
   const perfil = leerMd(perfilTxt);
   PERFIL = Object.assign({}, perfil.datos, { texto: perfil.cuerpo });
 
-  const slugs = await fetch(BASE + 'proyectos.json').then((r) => r.json());
+  const secciones = await fetch(BASE + 'proyectos.json').then((r) => r.json());
+  const grupos = {};
+  const todos = [];
 
-  const cargados = await Promise.all(slugs.map(async (slug) => {
-    const carpeta = BASE + 'proyectos/' + slug + '/';
-    try {
-      const { datos, cuerpo } = leerMd(await fetch(carpeta + 'proyecto.md').then((r) => r.text()));
-      if (!esVerdad(datos.publicado)) return null;
-      return {
-        slug,
-        carpeta,
-        titulo: datos.titulo || slug,
-        anio: datos.anio || '',
-        categoria: datos.categoria || '',
-        cliente: datos.cliente || '',
-        portada: carpeta + (datos.portada || 'portada.jpg'),
-        galeria: lista(datos.galeria).map((g) => carpeta + g),
-        orden: parseInt(datos.orden, 10) || 999,
-        texto: cuerpo,
-      };
-    } catch (e) {
-      console.warn('No se pudo leer el proyecto', slug, e);
-      return null;
-    }
-  }));
+  for (const seccion of Object.keys(secciones)) {
+    const cargados = await Promise.all(secciones[seccion].map(async (slug) => {
+      const carpeta = BASE + 'proyectos/' + seccion + '/' + slug + '/';
+      try {
+        const { datos, cuerpo } = leerMd(await fetch(carpeta + 'proyecto.md').then((r) => r.text()));
+        if (!esVerdad(datos.publicado)) return null;
+        return {
+          slug,
+          seccion,
+          carpeta,
+          titulo: datos.titulo || slug,
+          anio: datos.anio || '',
+          categoria: datos.categoria || '',
+          cliente: datos.cliente || '',
+          portada: carpeta + (datos.portada || 'portada.jpg'),
+          galeria: lista(datos.galeria).map((g) => carpeta + g),
+          orden: parseInt(datos.orden, 10) || 999,
+          texto: cuerpo,
+        };
+      } catch (e) {
+        console.warn('No se pudo leer el proyecto', seccion, slug, e);
+        return null;
+      }
+    }));
+    const listaSec = cargados.filter(Boolean).sort((a, b) => a.orden - b.orden);
+    grupos[seccion] = listaSec;
+    todos.push(...listaSec);
+  }
 
-  PROYECTOS = cargados.filter(Boolean).sort((a, b) => a.orden - b.orden);
+  SECCIONES = grupos;
+  PROYECTOS = todos;
 }
 
 /* ---------- piezas ---------- */
@@ -119,6 +132,14 @@ function tarjeta(p, i) {
 
 /* ---------- pantallas ---------- */
 
+function reticulaSeccion(seccion, etiqueta) {
+  const ps = SECCIONES[seccion] || [];
+  if (!ps.length) return '';
+  return `
+      <div class="proyectos__cabeza seccion-rotulo"><span class="rotulo">${esc(etiqueta)}</span></div>
+      <div class="reticula">${ps.map(tarjeta).join('')}</div>`;
+}
+
 function pantallaInicio() {
   return `
   ${cabecera('inicio')}
@@ -140,8 +161,8 @@ function pantallaInicio() {
     </section>
 
     <section class="proyectos" id="proyectos">
-      <div class="proyectos__cabeza seccion-rotulo"><span class="rotulo">Proyectos seleccionados</span></div>
-      <div class="reticula">${PROYECTOS.map(tarjeta).join('')}</div>
+      ${Object.keys(SECCIONES).filter((s) => (SECCIONES[s] || []).length)
+        .map((s) => reticulaSeccion(s, ETIQUETAS[s] || s)).join('')}
     </section>
   </main>
   ${pie()}`;

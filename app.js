@@ -7,8 +7,18 @@ const root = document.getElementById('app');
 
 // Versión de caché. Subir este número al cambiar cualquier contenido obliga
 // al navegador a pedir los archivos de nuevo y evita que muestre versiones viejas.
-const V = '3';
+const V = '4';
 const conV = (u) => u + (u.includes('?') ? '&c=' : '?c=') + V;
+
+// Convierte un enlace de Google Drive (o su ID) en la URL de su reproductor embebido.
+function videoDrive(url) {
+  if (!url) return '';
+  if (String(url).includes('/drive/folders/')) return '';
+  const m = String(url).match(/(?:file\/d\/|id=)([A-Za-z0-9_-]+)/);
+  const id = m ? m[1] : String(url).trim();
+  if (!id) return '';
+  return 'https://drive.google.com/file/d/' + id + '/preview';
+}
 
 /* ---------- utilidades ---------- */
 
@@ -68,6 +78,7 @@ async function cargar() {
           cliente: datos.cliente || '',
           portada: conV(carpeta + (datos.portada || 'portada.jpg')),
           galeria: lista(datos.galeria).map((g) => conV(carpeta + g)),
+          video: videoDrive(datos.video),
           orden: parseInt(datos.orden, 10) || 999,
           texto: cuerpo,
         };
@@ -196,6 +207,13 @@ function pantallaProyecto(slug) {
       </div>
       <p class="lead">${esc(p.texto)}</p>
     </section>
+
+    ${p.video ? `
+    <section class="ficha__video">
+      <div class="ratio">
+        <iframe src="${esc(p.video)}" title="${esc(p.titulo)}" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </section>` : ''}
 
     ${p.galeria.length ? `<section class="galeria">${p.galeria.map((g) =>
       `<figure><img src="${esc(g)}" alt="" loading="lazy" data-imagen></figure>`).join('')}</section>` : ''}

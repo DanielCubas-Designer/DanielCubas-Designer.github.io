@@ -169,6 +169,11 @@ a:hover { color:var(--accent); }
 .galeria figure:first-child { aspect-ratio:3/4; }
 .galeria img { width:100%; height:100%; object-fit:cover; filter:contrast(1.06) saturate(.96); }
 
+/* ---------- video de proyecto (Google Drive) ---------- */
+.ficha__video { padding:0 var(--page-x) var(--page-y); }
+.ficha__video .ratio { position:relative; width:100%; aspect-ratio:16/9; background:var(--ink-800); overflow:hidden; }
+.ficha__video iframe { position:absolute; inset:0; width:100%; height:100%; border:0; display:block; }
+
 /* ---------- perfil ---------- */
 .perfil {
   display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.68fr); gap:var(--gutter);

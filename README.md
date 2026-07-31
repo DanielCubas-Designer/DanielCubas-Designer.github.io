@@ -66,6 +66,18 @@ Sin títulos ni listas: prosa corta.
 Este último paso es el único que se olvida. Si el proyecto no aparece en el sitio,
 casi siempre falta aquí.
 
+### Vídeo de proyecto (cortometraje)
+
+Si el proyecto es un cortometraje, añadir un campo `video:` al `proyecto.md` con el
+enlace de Google Drive del archivo (compartido como *Cualquiera con el enlace*).
+Se incrusta el reproductor de Drive en la ficha:
+
+```yaml
+video: https://drive.google.com/file/d/1AbCdEfGh/view?usp=sharing
+```
+
+También funciona pasando sólo el ID del archivo. Sin este campo, la ficha no muestra vídeo.
+
 ---
 
 ## Otras tareas frecuentes

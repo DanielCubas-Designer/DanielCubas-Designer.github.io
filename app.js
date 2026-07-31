@@ -90,7 +90,7 @@ function pie() {
   <footer class="pie" id="contacto">
     <p class="pie__nota">Disponible para proyectos, colaboraciones y desarrollo de marca.</p>
     <div class="pie__contacto">
-      <a href="https://instagram.com/${esc((PERFIL.instagram || '').replace('@', ''))}" target="_blank" rel="noopener">${esc(PERFIL.instagram)}</a>
+      <a href="https://www.instagram.com/${esc((PERFIL.instagram || '').replace('@', ''))}" target="_blank" rel="noopener">${esc(PERFIL.instagram)}</a>
       <a href="tel:${esc((PERFIL.telefono || '').replace(/\s/g, ''))}">${esc(PERFIL.telefono)}</a>
     </div>
   </footer>`;
@@ -189,7 +189,7 @@ function pantallaPerfil(activa) {
       ${disciplinas()}
       <div class="portada__acciones">
         <a class="boton boton--solido" href="https://wa.me/52${esc((PERFIL.telefono || '').replace(/\s/g, ''))}?text=Hola%20Daniel%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20platicar%20contigo." target="_blank" rel="noopener">Escríbeme</a>
-        <a class="boton" href="https://instagram.com/${esc((PERFIL.instagram || '').replace('@', ''))}" target="_blank" rel="noopener">${esc(PERFIL.instagram)}</a>
+        <a class="boton" href="https://www.instagram.com/${esc((PERFIL.instagram || '').replace('@', ''))}" target="_blank" rel="noopener">${esc(PERFIL.instagram)}</a>
       </div>
     </div>
     <div class="perfil__foto"><img src="${esc(PERFIL.retrato)}" alt="${esc(PERFIL.nombre)}"></div>

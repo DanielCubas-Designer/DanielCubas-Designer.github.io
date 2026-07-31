@@ -7,7 +7,7 @@ titular_3: Dirección visual
 lead: Conceptos visuales con identidad, intención y narrativa.
 retrato: assets/retrato.jpg
 portada: assets/portada-inicio.jpg
-instagram: "@DanyCub"
+instagram: "@dany_cub"
 telefono: 477 284 3551
 disciplinas: Fotografía, Diseño gráfico, Identidad visual, Contenido para redes, Dirección de arte
 ---

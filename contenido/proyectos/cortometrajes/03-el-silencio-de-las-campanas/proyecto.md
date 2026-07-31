@@ -1,8 +1,8 @@
 ---
 titulo: El Silencio De Las Campanas
-anio: 2026
+anio: 2025
 categoria: Cortometraje
-cliente: Personal
+cliente: Universidad
 portada: portada.jpg
 galeria:
 video: https://drive.google.com/file/d/1U4r9ezUu7MJpRVSdSyHnJqJNd824Av5t/view?usp=sharing

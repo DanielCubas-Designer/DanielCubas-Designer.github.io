@@ -5,6 +5,11 @@
 const BASE = 'contenido/';
 const root = document.getElementById('app');
 
+// Versión de caché. Subir este número al cambiar cualquier contenido obliga
+// al navegador a pedir los archivos de nuevo y evita que muestre versiones viejas.
+const V = '3';
+const conV = (u) => u + (u.includes('?') ? '&c=' : '?c=') + V;
+
 /* ---------- utilidades ---------- */
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) =>
@@ -39,11 +44,11 @@ let PROYECTOS = [];
 let SECCIONES = {};
 
 async function cargar() {
-  const perfilTxt = await fetch(BASE + 'perfil.md').then((r) => r.text());
+  const perfilTxt = await fetch(conV(BASE + 'perfil.md')).then((r) => r.text());
   const perfil = leerMd(perfilTxt);
   PERFIL = Object.assign({}, perfil.datos, { texto: perfil.cuerpo });
 
-  const secciones = await fetch(BASE + 'proyectos.json').then((r) => r.json());
+  const secciones = await fetch(conV(BASE + 'proyectos.json')).then((r) => r.json());
   const grupos = {};
   const todos = [];
 
@@ -51,7 +56,7 @@ async function cargar() {
     const cargados = await Promise.all(secciones[seccion].map(async (slug) => {
       const carpeta = BASE + 'proyectos/' + seccion + '/' + slug + '/';
       try {
-        const { datos, cuerpo } = leerMd(await fetch(carpeta + 'proyecto.md').then((r) => r.text()));
+        const { datos, cuerpo } = leerMd(await fetch(conV(carpeta + 'proyecto.md')).then((r) => r.text()));
         if (!esVerdad(datos.publicado)) return null;
         return {
           slug,
@@ -61,8 +66,8 @@ async function cargar() {
           anio: datos.anio || '',
           categoria: datos.categoria || '',
           cliente: datos.cliente || '',
-          portada: carpeta + (datos.portada || 'portada.jpg'),
-          galeria: lista(datos.galeria).map((g) => carpeta + g),
+          portada: conV(carpeta + (datos.portada || 'portada.jpg')),
+          galeria: lista(datos.galeria).map((g) => conV(carpeta + g)),
           orden: parseInt(datos.orden, 10) || 999,
           texto: cuerpo,
         };
@@ -157,7 +162,7 @@ function pantallaInicio() {
           <a class="boton boton--fantasma" href="#contacto">Contacto</a>
         </div>
       </div>
-      <div class="portada__foto"><img src="${esc(PERFIL.portada)}" alt=""></div>
+      <div class="portada__foto"><img src="${esc(conV(PERFIL.portada))}" alt=""></div>
     </section>
 
     <section class="proyectos" id="proyectos">
@@ -213,7 +218,7 @@ function pantallaPerfil(activa) {
         <a class="boton" href="https://www.instagram.com/${esc((PERFIL.instagram || '').replace('@', ''))}" target="_blank" rel="noopener">${esc(PERFIL.instagram)}</a>
       </div>
     </div>
-    <div class="perfil__foto"><img src="${esc(PERFIL.retrato)}" alt="${esc(PERFIL.nombre)}"></div>
+    <div class="perfil__foto"><img src="${esc(conV(PERFIL.retrato))}" alt="${esc(PERFIL.nombre)}"></div>
   </main>
   ${pie()}`;
 }

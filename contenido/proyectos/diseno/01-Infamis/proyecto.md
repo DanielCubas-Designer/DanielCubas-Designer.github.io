@@ -9,4 +9,4 @@ orden: 1
 publicado: true
 ---
 
-Identidad para un juego de cartas coleccionables: sistema de cromática y simbología por facciones, frontales de carta y un brand book que mantiene el mundo visual coherente en cada pieza.
+Identidad para una marca de playeras: sistema de cromática y simbología por facciones y un brand book que mantiene el mundo visual coherente en cada pieza.

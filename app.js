@@ -175,7 +175,7 @@ function pantallaProyecto(slug) {
   ${cabecera('inicio')}
   <main>
     <div class="ficha__hero">
-      <img src="${esc(p.portada)}" alt="">
+      <img src="${esc(p.portada)}" alt="" data-imagen>
       <div class="ficha__titulo">
         <h1 class="titular titular--h1">${esc(p.titulo)}</h1>
         <span class="barra"></span>
@@ -193,7 +193,7 @@ function pantallaProyecto(slug) {
     </section>
 
     ${p.galeria.length ? `<section class="galeria">${p.galeria.map((g) =>
-      `<figure><img src="${esc(g)}" alt="" loading="lazy"></figure>`).join('')}</section>` : ''}
+      `<figure><img src="${esc(g)}" alt="" loading="lazy" data-imagen></figure>`).join('')}</section>` : ''}
   </main>
   ${pie()}`;
 }
@@ -217,6 +217,70 @@ function pantallaPerfil(activa) {
   </main>
   ${pie()}`;
 }
+
+/* ---------- visor de imágenes en pantalla completa ---------- */
+
+let visor = null;
+let visorLista = [];
+let visorIndice = 0;
+
+function abrirVisor(lista, indice) {
+  visorLista = lista;
+  visorIndice = indice;
+  visor = document.createElement('div');
+  visor.className = 'visor';
+  visor.innerHTML = `
+  <button class="visor__cerrar" aria-label="Cerrar" type="button">✕</button>
+  <button class="visor__nav visor__nav--prev" aria-label="Anterior" type="button">‹</button>
+  <div class="visor__caja"><img class="visor__img" src="" alt=""></div>
+  <button class="visor__nav visor__nav--next" aria-label="Siguiente" type="button">›</button>
+  <span class="visor__cuenta"></span>`;
+  document.body.appendChild(visor);
+  document.body.classList.add('sin-scroll');
+  pintarVisor();
+  requestAnimationFrame(() => visor.classList.add('visor--activo'));
+  visor.querySelector('.visor__cerrar').addEventListener('click', cerrarVisor);
+  visor.querySelector('.visor__nav--prev').addEventListener('click', () => moverVisor(-1));
+  visor.querySelector('.visor__nav--next').addEventListener('click', () => moverVisor(1));
+}
+
+function pintarVisor() {
+  visor.querySelector('.visor__img').src = visorLista[visorIndice];
+  const cuenta = visor.querySelector('.visor__cuenta');
+  cuenta.textContent = visorLista.length > 1 ? (visorIndice + 1) + ' / ' + visorLista.length : '';
+  const muchos = visorLista.length > 1;
+  visor.querySelector('.visor__nav--prev').style.display = muchos ? '' : 'none';
+  visor.querySelector('.visor__nav--next').style.display = muchos ? '' : 'none';
+}
+
+function moverVisor(delta) {
+  visorIndice = (visorIndice + delta + visorLista.length) % visorLista.length;
+  pintarVisor();
+}
+
+function cerrarVisor() {
+  if (!visor) return;
+  const el = visor;
+  visor = null;
+  el.classList.remove('visor--activo');
+  setTimeout(() => el.remove(), 240);
+  document.body.classList.remove('sin-scroll');
+}
+
+document.addEventListener('click', (e) => {
+  const img = e.target.closest('[data-imagen]');
+  if (!img) return;
+  const imgs = Array.from(document.querySelectorAll('[data-imagen]')).map((x) => x.getAttribute('src'));
+  const indice = imgs.indexOf(img.getAttribute('src'));
+  abrirVisor(imgs, indice < 0 ? 0 : indice);
+});
+
+document.addEventListener('keydown', (e) => {
+  if (!visor) return;
+  if (e.key === 'Escape') cerrarVisor();
+  else if (e.key === 'ArrowLeft') moverVisor(-1);
+  else if (e.key === 'ArrowRight') moverVisor(1);
+});
 
 /* ---------- enrutado ---------- */
 

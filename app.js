@@ -7,7 +7,7 @@ const root = document.getElementById('app');
 
 // Versión de caché. Subir este número al cambiar cualquier contenido obliga
 // al navegador a pedir los archivos de nuevo y evita que muestre versiones viejas.
-const V = '4';
+const V = '5';
 const conV = (u) => u + (u.includes('?') ? '&c=' : '?c=') + V;
 
 // Convierte un enlace de Google Drive (o su ID) en la URL de su reproductor embebido.
@@ -45,7 +45,7 @@ const lista = (v) => (v || '').split(',').map((s) => s.trim()).filter(Boolean);
 const esVerdad = (v) => v === undefined || /^(true|sí|si|yes|1)$/i.test(String(v).trim());
 
 // Secciones del sitio. Las claves son las carpetas dentro de contenido/proyectos/.
-const ETIQUETAS = { fotografia: 'Fotografía', diseno: 'Diseño' };
+const ETIQUETAS = { fotografia: 'Fotografía', diseno: 'Diseño', cortometrajes: 'Cortometrajes' };
 
 /* ---------- carga de contenido ---------- */
 

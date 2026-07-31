@@ -16,12 +16,13 @@ design-system/      documentación del sistema de diseño (no se publica como si
 
 ## Cómo añadir un proyecto
 
-El sitio separa los proyectos en dos secciones: **Fotografía** y **Diseño**. Cada una
-es una carpeta dentro de `contenido/proyectos/`:
+El sitio separa los proyectos en tres secciones: **Fotografía**, **Diseño** y
+**Cortometrajes**. Cada una es una carpeta dentro de `contenido/proyectos/`:
 
 ```
 contenido/proyectos/fotografia/01-Crimson-Cobalt/
 contenido/proyectos/diseno/01-identidad-visual/
+contenido/proyectos/cortometrajes/02-mitosis/
 ```
 
 **1.** Crear una carpeta dentro de la sección correspondiente (`fotografia/` o `diseno/`).

@@ -5,9 +5,9 @@ categoria: Cortometraje
 cliente: Personal
 portada: portada.jpg
 galeria:
-video:
+video: https://drive.google.com/file/d/1GRR_qvQ91ZHK4sAloA6YlSFZzJh31UF-/view?usp=sharing
 orden: 1
-publicado: false
+publicado: true
 ---
 
-Cortometraje de Daniel Cubas. Escribe aquí una o dos frases sobre la historia. Cuando tengas el enlace de Google Drive, ponlo en `video:` y cambia `publicado: false` por `publicado: true`.
+Cortometraje dirigido por Daniel Cubas. Dos hermanos que no se han visto en años se reencuentran una noche en el pueblo.

@@ -5,9 +5,9 @@ categoria: Cortometraje
 cliente: Personal
 portada: portada.jpg
 galeria:
-video:
+video: https://drive.google.com/file/d/1wkrrRNDTL2uzk97NXiSjMiRX4_yrdRkx/view?usp=sharing
 orden: 2
-publicado: false
+publicado: true
 ---
 
-Cortometraje de Daniel Cubas. Escribe aquí una o dos frases sobre la historia. Cuando tengas el enlace de Google Drive, ponlo en `video:` y cambia `publicado: false` por `publicado: true`.
+Cortometraje dirigido por Daniel Cubas. Un día cualquiera, alguien se encuentra de frente con una versión de sí mismo.

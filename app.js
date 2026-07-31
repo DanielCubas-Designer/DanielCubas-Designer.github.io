@@ -188,7 +188,7 @@ function pantallaPerfil(activa) {
       <p class="texto">${esc(PERFIL.texto)}</p>
       ${disciplinas()}
       <div class="portada__acciones">
-        <a class="boton boton--solido" href="tel:${esc((PERFIL.telefono || '').replace(/\s/g, ''))}">Escribirme</a>
+        <a class="boton boton--solido" href="https://wa.me/52${esc((PERFIL.telefono || '').replace(/\s/g, ''))}?text=Hola%20Daniel%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20platicar%20contigo." target="_blank" rel="noopener">Escríbeme</a>
         <a class="boton" href="https://instagram.com/${esc((PERFIL.instagram || '').replace('@', ''))}" target="_blank" rel="noopener">${esc(PERFIL.instagram)}</a>
       </div>
     </div>

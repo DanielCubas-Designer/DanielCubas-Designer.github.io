@@ -5,9 +5,9 @@ categoria: Cortometraje
 cliente: Personal
 portada: portada.jpg
 galeria:
-video:
+video: https://drive.google.com/file/d/1UOGHOA_Ll3PXsOB43aZs1WOqqNZMqZvp/view?usp=sharing
 orden: 4
-publicado: false
+publicado: true
 ---
 
-Cortometraje dirigido por Daniel Cubas. Escribe aquí una o dos frases sobre la historia. Cuando tengas el enlace de Google Drive, ponlo en `video:` y cambia `publicado: false` por `publicado: true`.
+La leyenda de una espada maldita que moldea a su portador.

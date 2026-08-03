@@ -7,7 +7,7 @@ const root = document.getElementById('app');
 
 // Versión de caché. Subir este número al cambiar cualquier contenido obliga
 // al navegador a pedir los archivos de nuevo y evita que muestre versiones viejas.
-const V = '7';
+const V = '8';
 const conV = (u) => u + (u.includes('?') ? '&c=' : '?c=') + V;
 
 // Convierte un enlace de Google Drive (o su ID) en la URL de su reproductor embebido.
@@ -305,6 +305,18 @@ document.addEventListener('keydown', (e) => {
   else if (e.key === 'ArrowRight') moverVisor(1);
 });
 
+// Las imágenes horizontales (más anchas que altas) se muestran completas con un
+// marco en vez de recortarse dentro de los recuadros verticales.
+function ajustarPanoramicas(raiz) {
+  raiz.querySelectorAll('img').forEach((img) => {
+    const marcar = () => {
+      if (img.naturalWidth > img.naturalHeight) img.classList.add('imagen--panorama');
+    };
+    if (img.complete) marcar();
+    else img.addEventListener('load', marcar);
+  });
+}
+
 /* ---------- enrutado ---------- */
 
 // Desplaza a un ancla interna (#proyectos, #contacto) sin repintar la pantalla.
@@ -334,6 +346,7 @@ function dibujar() {
   document.title = 'Daniel Cubas — ' +
     (seccion === 'proyecto' && arg ? (PROYECTOS.find((x) => x.slug === arg) || {}).titulo || 'Proyecto'
       : seccion === 'perfil' ? 'Perfil' : 'Portafolio');
+  ajustarPanoramicas(root);
   window.scrollTo(0, 0);
 }
 

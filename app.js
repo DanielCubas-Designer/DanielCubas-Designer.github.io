@@ -7,7 +7,7 @@ const root = document.getElementById('app');
 
 // Versión de caché. Subir este número al cambiar cualquier contenido obliga
 // al navegador a pedir los archivos de nuevo y evita que muestre versiones viejas.
-const V = '6';
+const V = '7';
 const conV = (u) => u + (u.includes('?') ? '&c=' : '?c=') + V;
 
 // Convierte un enlace de Google Drive (o su ID) en la URL de su reproductor embebido.
@@ -211,7 +211,7 @@ function pantallaProyecto(slug) {
     ${p.video ? `
     <section class="ficha__video">
       <div class="ratio">
-        <iframe src="${esc(p.video)}" title="${esc(p.titulo)}" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
+        <iframe src="${esc(p.video)}" title="${esc(p.titulo)}" allow="autoplay; fullscreen" allowfullscreen></iframe>
       </div>
     </section>` : ''}
 

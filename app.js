@@ -7,7 +7,7 @@ const root = document.getElementById('app');
 
 // Versión de caché. Subir este número al cambiar cualquier contenido obliga
 // al navegador a pedir los archivos de nuevo y evita que muestre versiones viejas.
-const V = '10';
+const V = '11';
 const conV = (u) => u + (u.includes('?') ? '&c=' : '?c=') + V;
 
 // Convierte un enlace de Google Drive (o su ID) en la URL directa del archivo

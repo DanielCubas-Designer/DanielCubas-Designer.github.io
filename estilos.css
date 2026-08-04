@@ -187,7 +187,10 @@ a:hover { color:var(--accent); }
 
 /* ---------- video de proyecto (Google Drive, controles nativos) ---------- */
 .ficha__video { padding:0 var(--page-x) var(--page-y); }
-.ficha__video video { width:100%; display:block; background:var(--ink-800); }
+.ficha__video video {
+  display:block; width:100%; aspect-ratio:16/9; object-fit:contain;
+  background:var(--ink-900);
+}
 
 /* ---------- perfil ---------- */
 .perfil {
@@ -259,7 +262,7 @@ body.sin-scroll { overflow:hidden; }
 /* ---------- móvil ---------- */
 @media (max-width:860px) {
   .portada, .ficha__cuerpo, .perfil { grid-template-columns:1fr; }
-  .portada__foto, .perfil__foto { aspect-ratio:3/2; }
+  .portada__foto { aspect-ratio:3/2; }
   .ficha__hero { height:52vh; }
   .cabecera { padding:24px var(--page-x); }
   .nav { gap:24px; }

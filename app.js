@@ -7,17 +7,18 @@ const root = document.getElementById('app');
 
 // Versión de caché. Subir este número al cambiar cualquier contenido obliga
 // al navegador a pedir los archivos de nuevo y evita que muestre versiones viejas.
-const V = '9';
+const V = '10';
 const conV = (u) => u + (u.includes('?') ? '&c=' : '?c=') + V;
 
-// Convierte un enlace de Google Drive (o su ID) en la URL de su reproductor embebido.
+// Convierte un enlace de Google Drive (o su ID) en la URL directa del archivo
+// para reproducirlo con un <video> nativo (controles sin superposiciones).
 function videoDrive(url) {
   if (!url) return '';
   if (String(url).includes('/drive/folders/')) return '';
   const m = String(url).match(/(?:file\/d\/|id=)([A-Za-z0-9_-]+)/);
   const id = m ? m[1] : String(url).trim();
   if (!id) return '';
-  return 'https://drive.google.com/file/d/' + id + '/preview';
+  return 'https://drive.google.com/uc?export=download&id=' + id;
 }
 
 /* ---------- utilidades ---------- */
@@ -210,9 +211,9 @@ function pantallaProyecto(slug) {
 
     ${p.video ? `
     <section class="ficha__video">
-      <div class="ratio">
-        <iframe src="${esc(p.video)}" title="${esc(p.titulo)}" allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen referrerpolicy="no-referrer"></iframe>
-      </div>
+      <video controls playsinline webkit-playsinline preload="metadata" controlsList="nodownload">
+        <source src="${esc(p.video)}">
+      </video>
     </section>` : ''}
 
     ${p.galeria.length ? `<section class="galeria">${p.galeria.map((g) =>
@@ -236,7 +237,7 @@ function pantallaPerfil(activa) {
         <a class="boton" href="https://www.instagram.com/${esc((PERFIL.instagram || '').replace('@', ''))}" target="_blank" rel="noopener">${esc(PERFIL.instagram)}</a>
       </div>
     </div>
-    <div class="perfil__foto"><img class="imagen--marco" src="${esc(conV(PERFIL.retrato))}" alt="${esc(PERFIL.nombre)}"></div>
+    <div class="perfil__foto"><img src="${esc(conV(PERFIL.retrato))}" alt="${esc(PERFIL.nombre)}"></div>
   </main>
   ${pie()}`;
 }
@@ -305,12 +306,15 @@ document.addEventListener('keydown', (e) => {
   else if (e.key === 'ArrowRight') moverVisor(1);
 });
 
-// Las imágenes horizontales (más anchas que altas) se muestran completas con un
-// marco en vez de recortarse dentro de los recuadros verticales.
+// Las imágenes horizontales (más anchas que altas) no caben en los recuadros
+// verticales: se adapta el recuadro a su proporción para que se vean completas.
 function ajustarPanoramicas(raiz) {
   raiz.querySelectorAll('img').forEach((img) => {
     const marcar = () => {
-      if (img.naturalWidth > img.naturalHeight) img.classList.add('imagen--marco');
+      if (img.naturalWidth > img.naturalHeight) {
+        const caja = img.closest('.tarjeta__marco, .galeria figure, .portada__foto');
+        if (caja) caja.classList.add('imagen--marco');
+      }
     };
     if (img.complete) marcar();
     else img.addEventListener('load', marcar);

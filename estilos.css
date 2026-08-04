@@ -169,24 +169,25 @@ a:hover { color:var(--accent); }
 .galeria figure:first-child { aspect-ratio:3/4; }
 .galeria img { width:100%; height:100%; object-fit:cover; filter:contrast(1.06) saturate(.96); }
 
-/* Imágenes que no caben en su recuadro (horizontales, o retrato en caja vertical):
-   se muestran completas dentro de un marco en vez de recortarse. */
-.imagen--marco,
-.tarjeta__marco img.imagen--marco,
-.galeria img.imagen--marco,
-.portada__foto img.imagen--marco,
-.perfil__foto img.imagen--marco,
-.ficha__hero img.imagen--marco {
-  object-fit:contain;
-  padding:14px;
-  border:1px solid var(--rule);
-  background:var(--ink-800);
+/* Imágenes horizontales: el recuadro se adapta a la proporción de la imagen
+   para que se vea completa, llenando el ancho sin recortarse. */
+.tarjeta__marco.imagen--marco,
+.tarjeta:nth-child(3n+1) .tarjeta__marco.imagen--marco,
+.galeria figure.imagen--marco,
+.galeria figure:first-child.imagen--marco,
+.portada__foto.imagen--marco {
+  aspect-ratio:auto;
+}
+.tarjeta__marco.imagen--marco img,
+.galeria figure.imagen--marco img,
+.portada__foto.imagen--marco img {
+  height:auto;
+  object-fit:cover;
 }
 
-/* ---------- video de proyecto (Google Drive) ---------- */
+/* ---------- video de proyecto (Google Drive, controles nativos) ---------- */
 .ficha__video { padding:0 var(--page-x) var(--page-y); }
-.ficha__video .ratio { position:relative; width:100%; height:0; padding-top:56.25%; background:var(--ink-800); overflow:hidden; }
-.ficha__video iframe { position:absolute; inset:0; width:100%; height:100%; border:0; display:block; }
+.ficha__video video { width:100%; display:block; background:var(--ink-800); }
 
 /* ---------- perfil ---------- */
 .perfil {
@@ -194,8 +195,8 @@ a:hover { color:var(--accent); }
   padding:var(--page-y) var(--page-x); align-items:start;
 }
 .perfil__texto { display:flex; flex-direction:column; gap:36px; }
-.perfil__foto { position:relative; overflow:hidden; aspect-ratio:4/5; }
-.perfil__foto img { width:100%; height:100%; object-fit:cover; filter:contrast(1.06) saturate(.96); }
+.perfil__foto { position:relative; overflow:hidden; }
+.perfil__foto img { width:100%; height:auto; display:block; filter:contrast(1.06) saturate(.96); }
 
 /* ---------- visor de pantalla completa ---------- */
 body.sin-scroll { overflow:hidden; }

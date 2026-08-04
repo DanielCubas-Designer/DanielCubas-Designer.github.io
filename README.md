@@ -71,7 +71,8 @@ casi siempre falta aquí.
 
 Si el proyecto es un cortometraje, añadir un campo `video:` al `proyecto.md` con el
 enlace de Google Drive del archivo (compartido como *Cualquiera con el enlace*).
-Se reproduce con un `<video>` nativo con controles normales (funciona bien en móvil):
+Se incrusta el reproductor oficial de Drive en la ficha (funciona con archivos de
+cualquier tamaño, incluidos los mayores de 100 MB):
 
 ```yaml
 video: https://drive.google.com/file/d/1AbCdEfGh/view?usp=sharing

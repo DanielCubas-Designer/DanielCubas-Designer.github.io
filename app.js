@@ -7,18 +7,19 @@ const root = document.getElementById('app');
 
 // Versión de caché. Subir este número al cambiar cualquier contenido obliga
 // al navegador a pedir los archivos de nuevo y evita que muestre versiones viejas.
-const V = '11';
+const V = '12';
 const conV = (u) => u + (u.includes('?') ? '&c=' : '?c=') + V;
 
-// Convierte un enlace de Google Drive (o su ID) en la URL directa del archivo
-// para reproducirlo con un <video> nativo (controles sin superposiciones).
+// Convierte un enlace de Google Drive (o su ID) en su reproductor embebido.
+// Se usa /preview (el reproductor oficial) porque reproduce archivos de cualquier
+// tamaño; la URL de descarga directa bloquea los que pesan más de 100 MB.
 function videoDrive(url) {
   if (!url) return '';
   if (String(url).includes('/drive/folders/')) return '';
   const m = String(url).match(/(?:file\/d\/|id=)([A-Za-z0-9_-]+)/);
   const id = m ? m[1] : String(url).trim();
   if (!id) return '';
-  return 'https://drive.google.com/uc?export=download&id=' + id;
+  return 'https://drive.google.com/file/d/' + id + '/preview';
 }
 
 /* ---------- utilidades ---------- */
@@ -211,9 +212,9 @@ function pantallaProyecto(slug) {
 
     ${p.video ? `
     <section class="ficha__video">
-      <video controls playsinline webkit-playsinline preload="metadata" controlsList="nodownload">
-        <source src="${esc(p.video)}">
-      </video>
+      <div class="ratio">
+        <iframe src="${esc(p.video)}" title="${esc(p.titulo)}" allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
     </section>` : ''}
 
     ${p.galeria.length ? `<section class="galeria">${p.galeria.map((g) =>

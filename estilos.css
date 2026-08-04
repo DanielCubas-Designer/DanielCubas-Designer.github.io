@@ -169,13 +169,14 @@ a:hover { color:var(--accent); }
 .galeria figure:first-child { aspect-ratio:3/4; }
 .galeria img { width:100%; height:100%; object-fit:cover; filter:contrast(1.06) saturate(.96); }
 
-/* Imágenes horizontales: se muestran completas dentro de un marco en vez de recortarse. */
-.imagen--panorama,
-.tarjeta__marco img.imagen--panorama,
-.galeria img.imagen--panorama,
-.portada__foto img.imagen--panorama,
-.perfil__foto img.imagen--panorama,
-.ficha__hero img.imagen--panorama {
+/* Imágenes que no caben en su recuadro (horizontales, o retrato en caja vertical):
+   se muestran completas dentro de un marco en vez de recortarse. */
+.imagen--marco,
+.tarjeta__marco img.imagen--marco,
+.galeria img.imagen--marco,
+.portada__foto img.imagen--marco,
+.perfil__foto img.imagen--marco,
+.ficha__hero img.imagen--marco {
   object-fit:contain;
   padding:14px;
   border:1px solid var(--rule);

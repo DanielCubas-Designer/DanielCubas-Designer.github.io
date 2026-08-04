@@ -7,7 +7,7 @@ const root = document.getElementById('app');
 
 // Versión de caché. Subir este número al cambiar cualquier contenido obliga
 // al navegador a pedir los archivos de nuevo y evita que muestre versiones viejas.
-const V = '8';
+const V = '9';
 const conV = (u) => u + (u.includes('?') ? '&c=' : '?c=') + V;
 
 // Convierte un enlace de Google Drive (o su ID) en la URL de su reproductor embebido.
@@ -211,7 +211,7 @@ function pantallaProyecto(slug) {
     ${p.video ? `
     <section class="ficha__video">
       <div class="ratio">
-        <iframe src="${esc(p.video)}" title="${esc(p.titulo)}" allow="autoplay; fullscreen" allowfullscreen></iframe>
+        <iframe src="${esc(p.video)}" title="${esc(p.titulo)}" allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
     </section>` : ''}
 
@@ -236,7 +236,7 @@ function pantallaPerfil(activa) {
         <a class="boton" href="https://www.instagram.com/${esc((PERFIL.instagram || '').replace('@', ''))}" target="_blank" rel="noopener">${esc(PERFIL.instagram)}</a>
       </div>
     </div>
-    <div class="perfil__foto"><img src="${esc(conV(PERFIL.retrato))}" alt="${esc(PERFIL.nombre)}"></div>
+    <div class="perfil__foto"><img class="imagen--marco" src="${esc(conV(PERFIL.retrato))}" alt="${esc(PERFIL.nombre)}"></div>
   </main>
   ${pie()}`;
 }
@@ -310,7 +310,7 @@ document.addEventListener('keydown', (e) => {
 function ajustarPanoramicas(raiz) {
   raiz.querySelectorAll('img').forEach((img) => {
     const marcar = () => {
-      if (img.naturalWidth > img.naturalHeight) img.classList.add('imagen--panorama');
+      if (img.naturalWidth > img.naturalHeight) img.classList.add('imagen--marco');
     };
     if (img.complete) marcar();
     else img.addEventListener('load', marcar);

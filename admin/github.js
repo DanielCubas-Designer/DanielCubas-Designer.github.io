@@ -51,13 +51,22 @@
       return r.status === 204 ? null : r.json();
     }
 
-    // Comprueba que el token existe y puede escribir en el repositorio.
+    /* Comprueba que el token existe y puede escribir en el repositorio.
+       `permissions` de /repos describe a la cuenta, no al token, así que se prueba
+       escribiendo de verdad un blob suelto: no toca ninguna rama y, como siempre tiene
+       el mismo contenido, es siempre el mismo objeto. */
     async verificar() {
-      const info = await this.api('GET', this.base);
-      if (!info.permissions || !info.permissions.push) {
-        throw new Error('El token no tiene permiso de escritura sobre el repositorio.');
+      await this.api('GET', this.base);
+      try {
+        await this.api('POST', this.base + '/git/blobs', { content: 'panel', encoding: 'utf-8' });
+      } catch (e) {
+        if (e.status === 403 || e.status === 404) {
+          const err = new Error('El token no tiene permiso para guardar: en GitHub, dale el permiso Contents → Read and write.');
+          err.status = 403;
+          throw err;
+        }
+        throw e;
       }
-      return info;
     }
 
     // Lista de todas las rutas de archivo de la rama.

@@ -49,15 +49,17 @@ async function main() {
   const token = process.env.TOKEN_GITHUB || await preguntarOculto('Token de GitHub (no se verá al pegarlo): ');
   if (!token) throw new Error('No se escribió ningún token.');
 
-  const r = await fetch('https://api.github.com/repos/' + CONFIG.owner + '/' + CONFIG.repo, {
-    headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json' },
+  // Se prueba la escritura creando un blob suelto (no toca ninguna rama).
+  const r = await fetch('https://api.github.com/repos/' + CONFIG.owner + '/' + CONFIG.repo + '/git/blobs', {
+    method: 'POST',
+    headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content: 'panel', encoding: 'utf-8' }),
   });
   if (r.status === 401) throw new Error('GitHub no reconoce ese token.');
-  if (!r.ok) throw new Error('El token no tiene acceso al repositorio (' + r.status + ').');
-  const info = await r.json();
-  if (!info.permissions || !info.permissions.push) {
-    throw new Error('El token puede leer pero no escribir. Dale el permiso Contents: Read and write.');
+  if (r.status === 403 || r.status === 404) {
+    throw new Error('El token no puede escribir en el repositorio. Dale el permiso Contents: Read and write.');
   }
+  if (!r.ok) throw new Error('GitHub respondió ' + r.status + '.');
   console.log('Token válido, con permiso de escritura sobre ' + CONFIG.repo + '.');
 
   const clave = process.env.CLAVE_PANEL || await preguntarOculto('Contraseña del panel (usuario ' + CUENTA.usuario + '): ');

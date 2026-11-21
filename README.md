@@ -30,16 +30,13 @@ repositorio, permiso *Contents: Read and write*), guardado **cifrado con la cont
 `admin/acceso.json`. La contraseña no está en el código: de ella se deriva una clave (PBKDF2,
 un millón de iteraciones) que comprueba la contraseña y descifra el token.
 
-**Cuando el token caduque** (o para cambiarlo), crear uno nuevo desde la cuenta
-DanielCubas-Designer en *Settings → Developer settings → Fine-grained tokens* y ejecutar:
+**Cuando el token falte, caduque o no tenga permiso de escritura**, el panel lo detecta al
+entrar y muestra los pasos para crear uno nuevo desde la cuenta DanielCubas-Designer. Se pega
+ahí mismo y el panel lo cifra y lo guarda en `admin/acceso.json` (hace el commit solo).
 
-```
-node herramientas/cifrar-token.js
-```
-
-Pide el token y la contraseña sin mostrarlos, los comprueba y reescribe `admin/acceso.json`.
-Después, commit y push. Mientras tanto, el panel permite pegar un token provisional que se
-guarda sólo en ese navegador.
+También se puede hacer desde la terminal con `node herramientas/cifrar-token.js`: pide el
+token y la contraseña sin mostrarlos, los comprueba y reescribe `admin/acceso.json`
+(después, commit y push).
 
 Para cambiar la contraseña hay que generar `sal` y `verificador` nuevos para `CUENTA`, al
 inicio de `admin/admin.js` (verificador = SHA-256 de la clave PBKDF2 de 32 bytes), y volver a

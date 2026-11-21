@@ -23,7 +23,6 @@ const CUENTA = {
   verificador: 'lc0jW/pzLkopiZgIcHeR5JsY7SfUpNcU1WciIqzy9Hg=',
 };
 
-const CLAVE_TOKEN = 'dc-admin-token-v2';
 const ETIQUETAS = { fotografia: 'Fotografía', diseno: 'Diseño', cortometrajes: 'Cortometrajes' };
 const CATEGORIA = { fotografia: 'Fotografía', diseno: 'Diseño', cortometrajes: 'Cortometraje' };
 const LADO_MAX = 2400;      // borde largo de las fotos, como pide el README
@@ -44,15 +43,6 @@ const aB64 = (bytes) => btoa(String.fromCharCode.apply(null, bytes));
 const deB64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
 const dos = (n) => String(n).padStart(2, '0');
 const sello = () => Date.now().toString(36);
-
-function ls(accion, valor) {
-  try {
-    if (accion === 'leer') return localStorage.getItem(CLAVE_TOKEN);
-    if (accion === 'guardar') localStorage.setItem(CLAVE_TOKEN, valor);
-    if (accion === 'borrar') localStorage.removeItem(CLAVE_TOKEN);
-  } catch (e) { /* almacenamiento bloqueado: se pedirá el token cada vez */ }
-  return null;
-}
 
 /* ---------- contraseña y token cifrado ---------- */
 
@@ -86,17 +76,11 @@ async function tokenDelSitio(llave) {
   }
 }
 
-// Token de respaldo pegado en este navegador (sólo si el del sitio falta o caducó).
-async function tokenLocal(llave) {
-  const guardado = ls('leer');
-  if (!guardado) return null;
-  try { return await descifrar(llave, JSON.parse(guardado)); } catch (e) { return null; }
-}
-
-async function guardarTokenLocal(token, llave) {
+// Contenido de admin/acceso.json: el token cifrado con la llave de la contraseña.
+async function cifrarToken(token, llave) {
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const datos = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, llave, enc.encode(token)));
-  ls('guardar', JSON.stringify({ iv: aB64(iv), datos: aB64(datos) }));
+  return JSON.stringify({ iv: aB64(iv), datos: aB64(datos) }, null, 2) + '\n';
 }
 
 /* ---------- archivos .md (mismo formato que lee app.js) ---------- */
@@ -258,61 +242,54 @@ function vistaAcceso(mensaje) {
         return;
       }
       aviso.textContent = 'Conectando con GitHub…';
-      const delSitio = await tokenDelSitio(llave);
-      if (delSitio) {
-        try {
-          return await entrar(delSitio, 'sitio');
-        } catch (err) {
-          if (err.status !== 401 && err.status !== 403 && err.status !== 404) throw err;
+      const token = await tokenDelSitio(llave);
+      if (!token) return vistaConectar(llave, 'El sitio todavía no tiene guardado su acceso a GitHub.');
+      try {
+        await entrar(token);
+      } catch (err) {
+        if (err.status === 401) return vistaConectar(llave, 'El acceso a GitHub guardado en el sitio caducó o fue borrado.');
+        if (err.status === 403 || err.status === 404) {
+          return vistaConectar(llave, 'El acceso a GitHub guardado en el sitio no tiene permiso para guardar cambios.');
         }
+        throw err;
       }
-      const local = await tokenLocal(llave);
-      if (!local) {
-        return vistaConectar(llave, delSitio
-          ? 'El acceso a GitHub guardado en el sitio caducó o fue revocado.' : '');
-      }
-      await entrar(local, 'local');
     } catch (err) {
-      if (llave && err.status === 401) return vistaConectar(llave, 'El token guardado en este navegador ya no es válido.');
       aviso.textContent = err.message;
       boton.disabled = false;
     }
   });
 }
 
-let origenToken = 'sitio';
-
-async function entrar(token, origen) {
-  origenToken = origen;
+async function entrar(token) {
   repo = new window.RepoGitHub(Object.assign({ token }, CONFIG));
   await repo.verificar();
   await cargarDatos();
   vistaProyectos();
 }
 
-/* ---------- pantalla: conectar este dispositivo con GitHub ---------- */
+/* ---------- pantalla: conectar el sitio con GitHub ---------- */
 
+// Se muestra cuando el token guardado en el sitio falta, caducó o no puede escribir.
+// El token que se pega aquí se cifra con la contraseña y se guarda en admin/acceso.json,
+// así sirve desde cualquier dispositivo y no hay que volver a pegarlo.
 function vistaConectar(llave, mensaje) {
   const repoUrl = 'https://github.com/' + CONFIG.owner + '/' + CONFIG.repo;
   raiz.innerHTML = `
   <main class="acceso">
     <form class="acceso__caja acceso__caja--ancha" id="f-token">
       <div class="seccion-rotulo"><span class="rotulo">Conectar con GitHub</span></div>
-      <p class="texto">${esc(mensaje || 'El sitio todavía no tiene guardado su acceso a GitHub.')}
-        Para guardar cambios, el panel necesita un <strong>token de GitHub</strong> con permiso
-        sobre el repositorio. Lo ideal es renovarlo para todos con <code>herramientas/cifrar-token.js</code>
-        (ver README); mientras tanto puedes pegarlo aquí y quedará guardado, cifrado, sólo en este navegador.</p>
+      <p class="texto">${esc(mensaje)} Para guardar cambios, el panel necesita un
+        <strong>token de GitHub</strong>. Se pega una sola vez: queda guardado en el sitio,
+        cifrado con la contraseña del panel.</p>
       <ol class="pasos">
         <li>Con la sesión de GitHub de la cuenta <strong>${esc(CONFIG.owner)}</strong>, abre
           <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">crear token</a>.</li>
+        <li>Ponle un nombre (por ejemplo «Panel portafolio») y en <em>Expiration</em> elige <em>No expiration</em>.</li>
         <li>En <em>Repository access</em> elige <em>Only select repositories</em> →
           <a href="${esc(repoUrl)}" target="_blank" rel="noopener">${esc(CONFIG.repo)}</a>.</li>
-        <li>En <em>Permissions → Repository permissions</em>, pon <em>Contents</em> en <em>Read and write</em>.</li>
+        <li>En <em>Permissions</em>, añade <em>Contents</em> y cámbialo a <strong>Read and write</strong>.</li>
         <li>Pulsa <em>Generate token</em>, copia el código (empieza por <code>github_pat_</code>) y pégalo aquí.</li>
       </ol>
-      <p class="nota">Si usas otra cuenta que es colaboradora del repositorio, crea en su lugar un
-        <a href="https://github.com/settings/tokens/new?scopes=public_repo&amp;description=Panel%20portafolio" target="_blank" rel="noopener">token clásico</a>
-        con el permiso <code>public_repo</code>.</p>
       <label class="campo"><span class="campo__k">Token</span>
         <input name="token" type="password" autocomplete="off" spellcheck="false" required></label>
       <p class="aviso" role="alert"></p>
@@ -333,9 +310,14 @@ function vistaConectar(llave, mensaje) {
     boton.disabled = true;
     aviso.textContent = 'Comprobando el token…';
     try {
-      await entrar(token, 'local');
-      await guardarTokenLocal(token, llave);
-      avisar('Navegador conectado.', 'ok');
+      repo = new window.RepoGitHub(Object.assign({ token }, CONFIG));
+      await repo.verificar();
+      aviso.textContent = 'Guardando el acceso en el sitio…';
+      await repo.commit('Panel: renueva el acceso a GitHub',
+        [{ path: 'admin/acceso.json', texto: await cifrarToken(token, llave) }]);
+      await cargarDatos();
+      vistaProyectos();
+      avisar('Conectado. Desde ahora basta con usuario y contraseña en cualquier dispositivo.', 'ok');
     } catch (err) {
       repo = null;
       aviso.textContent = err.status === 401 ? 'GitHub no reconoce ese token. Revisa que esté completo.'
@@ -365,25 +347,12 @@ function marco(activa, contenido) {
   <main class="panel">${contenido}</main>
   <footer class="panel__pie">
     <span>Los cambios aparecen en el sitio uno o dos minutos después de guardar.</span>
-    ${origenToken === 'local' ? '<button type="button" class="enlace" data-olvidar>Desconectar este navegador</button>' : ''}
   </footer>`;
   raiz.querySelectorAll('[data-ir]').forEach((b) => b.addEventListener('click', () => {
     if (ocupado) return;
     if (b.dataset.ir === 'perfil') vistaPerfil(); else vistaProyectos();
   }));
   raiz.querySelector('[data-salir]').addEventListener('click', () => { if (!ocupado) vistaAcceso(); });
-  const olvidar = raiz.querySelector('[data-olvidar]');
-  if (olvidar) olvidar.addEventListener('click', () => {
-    if (ocupado) return;
-    if (!olvidar.dataset.seguro) {
-      olvidar.dataset.seguro = '1';
-      olvidar.textContent = '¿Seguro? Pulsa otra vez para borrar el token de este navegador';
-      setTimeout(() => { delete olvidar.dataset.seguro; olvidar.textContent = 'Desconectar este navegador'; }, 5000);
-      return;
-    }
-    ls('borrar');
-    vistaAcceso('Navegador desconectado.');
-  });
   window.scrollTo(0, 0);
 }
 
@@ -698,9 +667,8 @@ async function ejecutar(mensaje, cambios, exito, despues) {
     avisar(exito + ' El sitio se actualiza en uno o dos minutos.', 'ok');
   } catch (err) {
     bloquear(false);
-    if (err.status === 401) {
-      if (origenToken === 'local') ls('borrar');
-      vistaAcceso('El acceso a GitHub ya no es válido. Entra de nuevo.');
+    if (err.status === 401 || err.status === 403) {
+      vistaAcceso('El acceso a GitHub ya no es válido. Entra de nuevo para renovarlo.');
     }
     avisar('No se pudo guardar. ' + err.message, 'error');
   }

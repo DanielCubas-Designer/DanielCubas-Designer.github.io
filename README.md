@@ -9,12 +9,33 @@ estilos.css         todo el diseño
 app.js              el motor: lee /contenido y dibuja las pantallas
 assets/             retrato, portada e isotipo
 contenido/          lo editable: perfil y proyectos
+admin/              panel de administración (/admin/)
 design-system/      documentación del sistema de diseño (no se publica como sitio)
 ```
 
 ---
 
-## Cómo añadir un proyecto
+## Panel de administración
+
+En **<https://danielcubas-designer.github.io/admin/>** se pueden crear, editar, ocultar y
+borrar proyectos (con sus fotos) y cambiar el perfil sin tocar archivos. Usuario:
+`dannycubas`. La contraseña no está en el código: sólo su hash (PBKDF2) en `admin/admin.js`.
+
+Cómo funciona: cada vez que se guarda, el panel hace un commit en este repositorio a través
+de la API de GitHub, y GitHub Pages vuelve a publicar el sitio en uno o dos minutos. Las fotos
+se reducen solas a 2400 px y JPG antes de subirse.
+
+**La primera vez en cada navegador** el panel pide un *token de GitHub* (las instrucciones
+aparecen en pantalla): un token *fine-grained* con acceso sólo a este repositorio y el permiso
+*Contents: Read and write*. Se guarda cifrado con la contraseña en ese navegador. Cuando el
+token caduca, el panel vuelve a pedirlo. «Desconectar este dispositivo» lo borra.
+
+Para cambiar la contraseña hay que generar un hash nuevo y reemplazar `sal` y `hash` en
+`CUENTA`, al inicio de `admin/admin.js`; después, reconectar el token en cada navegador.
+
+---
+
+## Cómo añadir un proyecto a mano
 
 El sitio separa los proyectos en tres secciones: **Fotografía**, **Diseño** y
 **Cortometrajes**. Cada una es una carpeta dentro de `contenido/proyectos/`:

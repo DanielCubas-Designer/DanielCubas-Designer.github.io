@@ -10,6 +10,10 @@ const root = document.getElementById('app');
 const V = '12';
 const conV = (u) => u + (u.includes('?') ? '&c=' : '?c=') + V;
 
+// Los textos (perfil, lista y fichas) se revalidan siempre con el servidor: así los
+// cambios hechos desde el panel /admin/ se ven en cuanto GitHub Pages los publica.
+const FRESCO = { cache: 'no-cache' };
+
 // Convierte un enlace de Google Drive (o su ID) en su reproductor embebido.
 // Se usa /preview (el reproductor oficial) porque reproduce archivos de cualquier
 // tamaño; la URL de descarga directa bloquea los que pesan más de 100 MB.
@@ -56,11 +60,11 @@ let PROYECTOS = [];
 let SECCIONES = {};
 
 async function cargar() {
-  const perfilTxt = await fetch(conV(BASE + 'perfil.md')).then((r) => r.text());
+  const perfilTxt = await fetch(conV(BASE + 'perfil.md'), FRESCO).then((r) => r.text());
   const perfil = leerMd(perfilTxt);
   PERFIL = Object.assign({}, perfil.datos, { texto: perfil.cuerpo });
 
-  const secciones = await fetch(conV(BASE + 'proyectos.json')).then((r) => r.json());
+  const secciones = await fetch(conV(BASE + 'proyectos.json'), FRESCO).then((r) => r.json());
   const grupos = {};
   const todos = [];
 
@@ -68,7 +72,7 @@ async function cargar() {
     const cargados = await Promise.all(secciones[seccion].map(async (slug) => {
       const carpeta = BASE + 'proyectos/' + seccion + '/' + slug + '/';
       try {
-        const { datos, cuerpo } = leerMd(await fetch(conV(carpeta + 'proyecto.md')).then((r) => r.text()));
+        const { datos, cuerpo } = leerMd(await fetch(conV(carpeta + 'proyecto.md'), FRESCO).then((r) => r.text()));
         if (!esVerdad(datos.publicado)) return null;
         return {
           slug,

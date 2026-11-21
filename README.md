@@ -18,20 +18,32 @@ design-system/      documentación del sistema de diseño (no se publica como si
 ## Panel de administración
 
 En **<https://danielcubas-designer.github.io/admin/>** se pueden crear, editar, ocultar y
-borrar proyectos (con sus fotos) y cambiar el perfil sin tocar archivos. Usuario:
-`dannycubas`. La contraseña no está en el código: sólo su hash (PBKDF2) en `admin/admin.js`.
+borrar proyectos (con sus fotos) y cambiar el perfil sin tocar archivos. Se entra sólo con
+usuario (`dannycubas`) y contraseña, desde cualquier dispositivo.
 
 Cómo funciona: cada vez que se guarda, el panel hace un commit en este repositorio a través
 de la API de GitHub, y GitHub Pages vuelve a publicar el sitio en uno o dos minutos. Las fotos
 se reducen solas a 2400 px y JPG antes de subirse.
 
-**La primera vez en cada navegador** el panel pide un *token de GitHub* (las instrucciones
-aparecen en pantalla): un token *fine-grained* con acceso sólo a este repositorio y el permiso
-*Contents: Read and write*. Se guarda cifrado con la contraseña en ese navegador. Cuando el
-token caduca, el panel vuelve a pedirlo. «Desconectar este dispositivo» lo borra.
+Para escribir en el repositorio el panel usa un *token de GitHub* (fine-grained, sólo este
+repositorio, permiso *Contents: Read and write*), guardado **cifrado con la contraseña** en
+`admin/acceso.json`. La contraseña no está en el código: de ella se deriva una clave (PBKDF2,
+un millón de iteraciones) que comprueba la contraseña y descifra el token.
 
-Para cambiar la contraseña hay que generar un hash nuevo y reemplazar `sal` y `hash` en
-`CUENTA`, al inicio de `admin/admin.js`; después, reconectar el token en cada navegador.
+**Cuando el token caduque** (o para cambiarlo), crear uno nuevo desde la cuenta
+DanielCubas-Designer en *Settings → Developer settings → Fine-grained tokens* y ejecutar:
+
+```
+node herramientas/cifrar-token.js
+```
+
+Pide el token y la contraseña sin mostrarlos, los comprueba y reescribe `admin/acceso.json`.
+Después, commit y push. Mientras tanto, el panel permite pegar un token provisional que se
+guarda sólo en ese navegador.
+
+Para cambiar la contraseña hay que generar `sal` y `verificador` nuevos para `CUENTA`, al
+inicio de `admin/admin.js` (verificador = SHA-256 de la clave PBKDF2 de 32 bytes), y volver a
+ejecutar `herramientas/cifrar-token.js`.
 
 ---
 
